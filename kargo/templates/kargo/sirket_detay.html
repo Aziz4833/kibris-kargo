@@ -30,7 +30,7 @@
     {% if urunler %}
         <div class="product-grid">
             {% for urun in urunler %}
-                <article class="product-card">
+                <a class="product-card" href="{% url 'urun_detay' sirket.slug urun.pk %}">
                     <div class="product-image">
                         {% if urun.fotograf %}
                             <img src="{{ urun.fotograf.url }}" alt="{{ urun.isim }}">
@@ -43,16 +43,16 @@
                             <h3>{{ urun.isim }}</h3>
                             <strong>{{ urun.fiyat }} TL</strong>
                         </div>
-                        <p>{{ urun.aciklama }}</p>
-                        <div class="cargo-info-grid">
+                        <p>{{ urun.aciklama|truncatechars:90 }}</p>
+                        <div class="product-meta-row">
                             {% if urun.cikis_yeri %}
-                                <span><strong>Çıkış</strong>{{ urun.cikis_yeri }}</span>
+                                <span>{{ urun.cikis_yeri }}</span>
                             {% endif %}
-                            <span><strong>Varış</strong>{{ urun.kargonun_gelecegi_yer }}</span>
-                            <span><strong>Adet</strong>{{ urun.adet }}</span>
+                            <span>{{ urun.kargonun_gelecegi_yer }}</span>
+                            <span>{{ urun.adet }} adet</span>
                         </div>
                     </div>
-                </article>
+                </a>
             {% endfor %}
         </div>
     {% else %}

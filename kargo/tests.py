@@ -46,6 +46,12 @@ class KargoAkisTestleri(TestCase):
         self.assertContains(detay_response, 'Girne')
         self.assertEqual(sirket.slug, 'ornek-firma')
 
+        urun = Urun.objects.get(isim='Kahve Makinesi')
+        urun_response = self.client.get(reverse('urun_detay', args=[sirket.slug, urun.pk]))
+
+        self.assertEqual(urun_response.status_code, 200)
+        self.assertContains(urun_response, 'Filtre kahve makinesi.')
+
     def test_panel_yetkisiz_kullaniciya_kapali(self):
         self.client.login(username='baska@example.com', password='GuvenliSifre123')
 

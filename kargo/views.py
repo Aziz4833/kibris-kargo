@@ -39,6 +39,19 @@ def sirket_detay(request, slug):
     )
 
 
+def urun_detay(request, slug, pk):
+    sirket = get_object_or_404(Sirket, slug=slug, yayinda=True)
+    urun = get_object_or_404(Urun, pk=pk, sirket=sirket, yayinda=True)
+    return render(
+        request,
+        'kargo/urun_detay.html',
+        {
+            'sirket': sirket,
+            'urun': urun,
+        },
+    )
+
+
 def eski_sirket_detay(request, pk):
     sirket = get_object_or_404(Sirket, pk=pk, yayinda=True)
     return redirect('sirket_detay', slug=sirket.slug, permanent=True)

@@ -1,0 +1,34 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}{{ urun.isim }} | {{ sirket.isim }}{% endblock %}
+
+{% block content %}
+<section class="product-detail-shell">
+    <div class="product-detail-media">
+        {% if urun.fotograf %}
+            <img src="{{ urun.fotograf.url }}" alt="{{ urun.isim }}">
+        {% else %}
+            <span>Fotoğraf yok</span>
+        {% endif %}
+    </div>
+    <div class="product-detail-info">
+        <p class="eyebrow">{{ sirket.isim }}</p>
+        <h1>{{ urun.isim }}</h1>
+        <strong class="detail-price">{{ urun.fiyat }} TL</strong>
+        <p>{{ urun.aciklama }}</p>
+
+        <div class="cargo-info-grid detail-cargo">
+            {% if urun.cikis_yeri %}
+                <span><strong>Çıkış yeri</strong>{{ urun.cikis_yeri }}</span>
+            {% endif %}
+            <span><strong>Geleceği yer</strong>{{ urun.kargonun_gelecegi_yer }}</span>
+            <span><strong>Adet</strong>{{ urun.adet }}</span>
+        </div>
+
+        <div class="form-actions">
+            <a class="button primary" href="{% url 'sirket_detay' sirket.slug %}">{{ sirket.isim }} ürünleri</a>
+            <a class="button ghost" href="{% url 'anasayfa' %}">Ana sayfa</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
