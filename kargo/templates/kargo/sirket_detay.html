@@ -45,28 +45,12 @@
                         </div>
                         <p>{{ urun.aciklama }}</p>
                         <div class="cargo-info-grid">
-                            <span><strong>Durum</strong>{{ urun.get_kargo_durumu_display }}</span>
                             {% if urun.cikis_yeri %}
                                 <span><strong>Çıkış</strong>{{ urun.cikis_yeri }}</span>
                             {% endif %}
                             <span><strong>Varış</strong>{{ urun.kargonun_gelecegi_yer }}</span>
-                            {% if urun.takip_kodu %}
-                                <span><strong>Takip</strong>{{ urun.takip_kodu }}</span>
-                            {% endif %}
-                            {% if urun.siparis_tarihi %}
-                                <span><strong>Sipariş</strong>{{ urun.siparis_tarihi }}</span>
-                            {% endif %}
-                            {% if urun.tahmini_gelis_tarihi %}
-                                <span><strong>Tahmini geliş</strong>{{ urun.tahmini_gelis_tarihi }}</span>
-                            {% endif %}
                             <span><strong>Adet</strong>{{ urun.adet }}</span>
-                            {% if urun.paket_agirligi %}
-                                <span><strong>Ağırlık</strong>{{ urun.paket_agirligi }} kg</span>
-                            {% endif %}
                         </div>
-                        {% if urun.kargo_notu %}
-                            <p class="cargo-note">{{ urun.kargo_notu }}</p>
-                        {% endif %}
                     </div>
                 </article>
             {% endfor %}

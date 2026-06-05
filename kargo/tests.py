@@ -28,8 +28,7 @@ class KargoAkisTestleri(TestCase):
             aciklama='Filtre kahve makinesi.',
             cikis_yeri='İstanbul',
             kargonun_gelecegi_yer='Girne',
-            kargo_durumu='yolda',
-            takip_kodu='ABC123',
+            adet=2,
             fiyat='2500.00',
         )
 
@@ -43,8 +42,8 @@ class KargoAkisTestleri(TestCase):
 
         self.assertEqual(detay_response.status_code, 200)
         self.assertContains(detay_response, 'Kahve Makinesi')
-        self.assertContains(detay_response, 'ABC123')
-        self.assertContains(detay_response, 'Yolda')
+        self.assertContains(detay_response, 'İstanbul')
+        self.assertContains(detay_response, 'Girne')
         self.assertEqual(sirket.slug, 'ornek-firma')
 
     def test_panel_yetkisiz_kullaniciya_kapali(self):

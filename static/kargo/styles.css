@@ -574,14 +574,6 @@ p {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
-.cargo-note {
-    margin: 12px 0 0;
-    padding: 10px 12px;
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    background: #edf8f6;
-}
-
 .auth-wrap {
     min-height: calc(100vh - 78px);
     display: grid;

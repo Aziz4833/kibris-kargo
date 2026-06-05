@@ -69,14 +69,11 @@
                             <h3>{{ urun.isim }}</h3>
                             <p>{{ urun.aciklama }}</p>
                             <div class="cargo-info-grid compact-cargo">
-                                <span><strong>Durum</strong>{{ urun.get_kargo_durumu_display }}</span>
+                                {% if urun.cikis_yeri %}
+                                    <span><strong>Çıkış</strong>{{ urun.cikis_yeri }}</span>
+                                {% endif %}
                                 <span><strong>Varış</strong>{{ urun.kargonun_gelecegi_yer }}</span>
-                                {% if urun.tahmini_gelis_tarihi %}
-                                    <span><strong>Tahmini</strong>{{ urun.tahmini_gelis_tarihi }}</span>
-                                {% endif %}
-                                {% if urun.takip_kodu %}
-                                    <span><strong>Takip</strong>{{ urun.takip_kodu }}</span>
-                                {% endif %}
+                                <span><strong>Adet</strong>{{ urun.adet }}</span>
                             </div>
                         </div>
                         <div class="admin-product-side">
