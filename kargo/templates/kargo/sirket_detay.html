@@ -1,0 +1,59 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}{{ sirket.isim }} | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+    <div class="detail-logo">
+        {% if sirket.logo %}
+            <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+        {% else %}
+            <span class="logo-placeholder large">{{ sirket.isim|slice:":2"|upper }}</span>
+        {% endif %}
+    </div>
+    <div>
+        <p class="eyebrow">Şirket vitrini</p>
+        <h1>{{ sirket.isim }}</h1>
+        <p>{{ sirket.aciklama|default:'Bu şirket altındaki ürünleri aşağıda görebilirsiniz.' }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Ürünler</p>
+            <h2>{{ sirket.isim }} ürünleri</h2>
+        </div>
+        <a class="button ghost" href="{% url 'anasayfa' %}">Ana sayfaya dön</a>
+    </div>
+
+    {% if urunler %}
+        <div class="product-grid">
+            {% for urun in urunler %}
+                <article class="product-card">
+                    <div class="product-image">
+                        {% if urun.fotograf %}
+                            <img src="{{ urun.fotograf.url }}" alt="{{ urun.isim }}">
+                        {% else %}
+                            <span>Fotoğraf yok</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-body">
+                        <div class="product-title">
+                            <h3>{{ urun.isim }}</h3>
+                            <strong>{{ urun.fiyat }} TL</strong>
+                        </div>
+                        <p>{{ urun.aciklama }}</p>
+                        <span class="route-label">Geleceği yer: {{ urun.kargonun_gelecegi_yer }}</span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Bu şirkette henüz ürün yok.</h3>
+            <p>Ürünler eklendiğinde fiyat ve kargo bilgileriyle burada listelenecek.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

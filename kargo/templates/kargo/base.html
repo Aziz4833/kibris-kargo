@@ -1,0 +1,43 @@
+{% load static %}
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Kıbrıs Kargo Pazarı{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'kargo/styles.css' %}">
+    <script defer src="{% static 'kargo/app.js' %}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'anasayfa' %}">
+            <span class="brand-mark">KK</span>
+            <span>
+                <strong>Kıbrıs Kargo Pazarı</strong>
+                <small>Şirketlere göre ürün takibi</small>
+            </span>
+        </a>
+        <nav class="main-nav">
+            <a href="{% url 'anasayfa' %}">Ana sayfa</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'panel' %}">Yönetim paneli</a>
+                <a href="{% url 'panel_cikis' %}">Çıkış</a>
+            {% else %}
+                <a href="{% url 'panel_giris' %}">Panel girişi</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

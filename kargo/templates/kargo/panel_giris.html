@@ -1,0 +1,26 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}Panel Girişi | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+    <form class="auth-card" method="post">
+        {% csrf_token %}
+        <p class="eyebrow">Yetkili giriş</p>
+        <h1>Yönetim paneli</h1>
+        <p class="muted">Bu panel sadece {{ admin_email }} hesabı için açıktır.</p>
+
+        {% include 'kargo/partials/form_errors.html' with form=form %}
+
+        <label>
+            <span>E-posta</span>
+            {{ form.email }}
+        </label>
+        <label>
+            <span>Şifre</span>
+            {{ form.password }}
+        </label>
+        <button class="button primary full" type="submit">Giriş yap</button>
+    </form>
+</section>
+{% endblock %}

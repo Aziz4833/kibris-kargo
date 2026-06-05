@@ -1,0 +1,57 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}Yönetim Paneli | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="panel-shell">
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Yönetim</p>
+            <h1>Şirket ve ürün paneli</h1>
+        </div>
+        <a class="button primary" href="{% url 'sirket_yeni' %}">Yeni şirket</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box"><strong>{{ yayindaki_sirket_sayisi }}</strong><span>Yayındaki şirket</span></div>
+        <div class="stat-box"><strong>{{ taslak_sayisi }}</strong><span>Taslak şirket</span></div>
+        <div class="stat-box"><strong>{{ urun_sayisi }}</strong><span>Toplam ürün</span></div>
+    </div>
+
+    <div class="toolbar">
+        <input type="search" id="panelSearch" placeholder="Şirket ara...">
+    </div>
+
+    {% if sirketler %}
+        <div class="panel-list" data-filter-list>
+            {% for sirket in sirketler %}
+                <article class="panel-row" data-filter-item="{{ sirket.isim|lower }}">
+                    <div class="row-logo">
+                        {% if sirket.logo %}
+                            <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+                        {% else %}
+                            <span class="logo-placeholder">{{ sirket.isim|slice:":2"|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="row-main">
+                        <h2>{{ sirket.isim }}</h2>
+                        <p>{{ sirket.aciklama|default:'Açıklama eklenmedi.' }}</p>
+                    </div>
+                    <div class="row-meta">
+                        <span class="status {% if sirket.yayinda %}live{% endif %}">
+                            {% if sirket.yayinda %}Yayında{% else %}Taslak{% endif %}
+                        </span>
+                        <span>{{ sirket.urun_sayisi }} ürün</span>
+                    </div>
+                    <a class="button" href="{% url 'panel_sirket_detay' sirket.pk %}">Yönet</a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>İlk şirketi oluşturun.</h3>
+            <p>Şirket adı ve logosunu ekleyip ardından ürünleri bu şirket altında toplayabilirsiniz.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

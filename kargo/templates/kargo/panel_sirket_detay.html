@@ -1,0 +1,88 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}{{ sirket.isim }} Yönetimi | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="panel-shell">
+    <div class="company-admin-head">
+        <div class="detail-logo">
+            {% if sirket.logo %}
+                <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+            {% else %}
+                <span class="logo-placeholder large">{{ sirket.isim|slice:":2"|upper }}</span>
+            {% endif %}
+        </div>
+        <div>
+            <p class="eyebrow">Şirket yönetimi</p>
+            <h1>{{ sirket.isim }}</h1>
+            <p>{{ sirket.aciklama|default:'Açıklama eklenmedi.' }}</p>
+            <span class="status {% if sirket.yayinda %}live{% endif %}">
+                {% if sirket.yayinda %}Ana sayfada yayında{% else %}Henüz ana sayfada değil{% endif %}
+            </span>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <a class="button" href="{% url 'panel' %}">Panele dön</a>
+        <a class="button" href="{% url 'sirket_duzenle' sirket.pk %}">Şirketi düzenle</a>
+        <a class="button primary" href="{% url 'urun_yeni' sirket.pk %}">Ürün ekle</a>
+        {% if sirket.yayinda %}
+            <form method="post" action="{% url 'sirket_yayindan_kaldir' sirket.pk %}">
+                {% csrf_token %}
+                <button class="button warning" type="submit">Yayından kaldır</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'sirket_yayinla' sirket.pk %}">
+                {% csrf_token %}
+                <button class="button success" type="submit">Siteye ekle</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <section class="section compact">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Ürün listesi</p>
+                <h2>{{ urunler|length }} ürün</h2>
+            </div>
+        </div>
+
+        {% if urunler %}
+            <div class="admin-products">
+                {% for urun in urunler %}
+                    <article class="admin-product">
+                        <div class="admin-product-img">
+                            {% if urun.fotograf %}
+                                <img src="{{ urun.fotograf.url }}" alt="{{ urun.isim }}">
+                            {% else %}
+                                <span>Fotoğraf yok</span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3>{{ urun.isim }}</h3>
+                            <p>{{ urun.aciklama }}</p>
+                            <span class="route-label">Geleceği yer: {{ urun.kargonun_gelecegi_yer }}</span>
+                        </div>
+                        <div class="admin-product-side">
+                            <strong>{{ urun.fiyat }} TL</strong>
+                            <span class="status {% if urun.yayinda %}live{% endif %}">
+                                {% if urun.yayinda %}Gösteriliyor{% else %}Gizli{% endif %}
+                            </span>
+                            <a class="button" href="{% url 'urun_duzenle' urun.pk %}">Düzenle</a>
+                            <form method="post" action="{% url 'urun_sil' urun.pk %}" data-confirm="Bu ürünü silmek istiyor musunuz?">
+                                {% csrf_token %}
+                                <button class="button danger" type="submit">Sil</button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>Bu şirkete ürün eklenmedi.</h3>
+                <p>Ürün ekle butonuyla isim, fotoğraf, açıklama, geliş yeri ve fiyat bilgilerini girebilirsiniz.</p>
+            </div>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

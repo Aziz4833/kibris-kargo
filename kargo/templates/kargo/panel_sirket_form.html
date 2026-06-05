@@ -1,0 +1,40 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}{% if sirket %}Şirket Düzenle{% else %}Yeni Şirket{% endif %} | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="form-shell">
+    <form class="form-card" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p class="eyebrow">Şirket</p>
+        <h1>{% if sirket %}Şirketi düzenle{% else %}Yeni şirket ekle{% endif %}</h1>
+
+        {% include 'kargo/partials/form_errors.html' with form=form %}
+
+        <label>
+            <span>Şirket ismi</span>
+            {{ form.isim }}
+        </label>
+        <label>
+            <span>Logo</span>
+            {{ form.logo }}
+        </label>
+        <div class="image-preview" data-image-preview>
+            {% if sirket and sirket.logo %}
+                <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+            {% else %}
+                <span>Logo önizlemesi</span>
+            {% endif %}
+        </div>
+        <label>
+            <span>Kısa açıklama</span>
+            {{ form.aciklama }}
+        </label>
+
+        <div class="form-actions">
+            <a class="button ghost" href="{% if sirket %}{% url 'panel_sirket_detay' sirket.pk %}{% else %}{% url 'panel' %}{% endif %}">Vazgeç</a>
+            <button class="button primary" type="submit">Kaydet</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

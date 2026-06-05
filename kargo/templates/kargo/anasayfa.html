@@ -1,0 +1,79 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}Ana Sayfa | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <p class="eyebrow">Kıbrıs için yerel kargo vitrini</p>
+        <h1>Şirketlere göre gelen ürünleri tek yerden takip edin.</h1>
+        <p class="hero-copy">
+            Trendyol, mağaza veya farklı firmalar altında eklenen ürünler; fiyatı, fotoğrafı,
+            açıklaması ve kargonun geleceği yer bilgisiyle yayınlanır.
+        </p>
+        <div class="hero-actions">
+            <a class="button primary" href="#sirketler">Şirketleri gör</a>
+            <a class="button ghost" href="{% url 'panel_giris' %}">Yetkili paneli</a>
+        </div>
+    </div>
+    <div class="hero-panel">
+        <div>
+            <span class="metric">{{ sirketler|length }}</span>
+            <small>Yayındaki şirket</small>
+        </div>
+        <div>
+            <span class="metric">{{ toplam_urun }}</span>
+            <small>Yayındaki ürün</small>
+        </div>
+        <div>
+            <span class="metric">TR</span>
+            <small>Tamamen Türkçe deneyim</small>
+        </div>
+    </div>
+</section>
+
+<section id="sirketler" class="section">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Vitrin</p>
+            <h2>Yayındaki şirketler</h2>
+        </div>
+    </div>
+
+    {% if sirketler %}
+        <div class="company-grid">
+            {% for sirket in sirketler %}
+                <article class="company-card">
+                    <a class="company-top" href="{% url 'sirket_detay' sirket.pk %}">
+                        {% if sirket.logo %}
+                            <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+                        {% else %}
+                            <span class="logo-placeholder">{{ sirket.isim|slice:":2"|upper }}</span>
+                        {% endif %}
+                        <div>
+                            <h3>{{ sirket.isim }}</h3>
+                            <p>{{ sirket.aciklama|default:'Bu şirket için ürün listesi hazırlanıyor.' }}</p>
+                        </div>
+                    </a>
+                    <div class="product-preview">
+                        {% for urun in sirket.urunler.all|slice:":3" %}
+                            <div class="mini-product">
+                                <span>{{ urun.isim }}</span>
+                                <strong>{{ urun.fiyat }} TL</strong>
+                            </div>
+                        {% empty %}
+                            <p class="muted">Henüz yayında ürün yok.</p>
+                        {% endfor %}
+                    </div>
+                    <a class="button full" href="{% url 'sirket_detay' sirket.pk %}">Tüm ürünleri aç</a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Henüz yayında şirket yok.</h3>
+            <p>Yetkili panelinden şirket ve ürün ekledikten sonra “Siteye ekle” butonuyla burada görünür.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

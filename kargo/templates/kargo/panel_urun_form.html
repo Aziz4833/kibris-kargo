@@ -1,0 +1,54 @@
+{% extends 'kargo/base.html' %}
+
+{% block title %}{% if urun %}Ürün Düzenle{% else %}Yeni Ürün{% endif %} | Kıbrıs Kargo Pazarı{% endblock %}
+
+{% block content %}
+<section class="form-shell">
+    <form class="form-card" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p class="eyebrow">{{ sirket.isim }}</p>
+        <h1>{% if urun %}Ürünü düzenle{% else %}Yeni ürün ekle{% endif %}</h1>
+
+        {% include 'kargo/partials/form_errors.html' with form=form %}
+
+        <div class="two-col">
+            <label>
+                <span>Ürün ismi</span>
+                {{ form.isim }}
+            </label>
+            <label>
+                <span>Fiyat</span>
+                {{ form.fiyat }}
+            </label>
+        </div>
+        <label>
+            <span>Ürün fotoğrafı</span>
+            {{ form.fotograf }}
+        </label>
+        <div class="image-preview product-preview-box" data-image-preview>
+            {% if urun and urun.fotograf %}
+                <img src="{{ urun.fotograf.url }}" alt="{{ urun.isim }}">
+            {% else %}
+                <span>Ürün fotoğrafı önizlemesi</span>
+            {% endif %}
+        </div>
+        <label>
+            <span>Açıklama</span>
+            {{ form.aciklama }}
+        </label>
+        <label>
+            <span>Kargonun geleceği yer</span>
+            {{ form.kargonun_gelecegi_yer }}
+        </label>
+        <label class="check-row">
+            {{ form.yayinda }}
+            <span>Ürünü vitrinde göster</span>
+        </label>
+
+        <div class="form-actions">
+            <a class="button ghost" href="{% url 'panel_sirket_detay' sirket.pk %}">Vazgeç</a>
+            <button class="button primary" type="submit">Kaydet</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
