@@ -21,26 +21,31 @@ class KargoAkisTestleri(TestCase):
         )
 
     def test_ana_sayfa_yayindaki_sirketi_gosterir(self):
-        sirket = Sirket.objects.create(isim='Trendyol', yayinda=True)
+        sirket = Sirket.objects.create(isim='Örnek Firma', yayinda=True)
         Urun.objects.create(
             sirket=sirket,
             isim='Kahve Makinesi',
             aciklama='Filtre kahve makinesi.',
+            cikis_yeri='İstanbul',
             kargonun_gelecegi_yer='Girne',
+            kargo_durumu='yolda',
+            takip_kodu='ABC123',
             fiyat='2500.00',
         )
 
         response = self.client.get(reverse('anasayfa'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Trendyol')
+        self.assertContains(response, 'Örnek Firma')
         self.assertNotContains(response, 'Kahve Makinesi')
 
         detay_response = self.client.get(reverse('sirket_detay', args=[sirket.slug]))
 
         self.assertEqual(detay_response.status_code, 200)
         self.assertContains(detay_response, 'Kahve Makinesi')
-        self.assertEqual(sirket.slug, 'trendyol')
+        self.assertContains(detay_response, 'ABC123')
+        self.assertContains(detay_response, 'Yolda')
+        self.assertEqual(sirket.slug, 'ornek-firma')
 
     def test_panel_yetkisiz_kullaniciya_kapali(self):
         self.client.login(username='baska@example.com', password='GuvenliSifre123')

@@ -64,7 +64,16 @@
                         <div>
                             <h3>{{ urun.isim }}</h3>
                             <p>{{ urun.aciklama }}</p>
-                            <span class="route-label">Geleceği yer: {{ urun.kargonun_gelecegi_yer }}</span>
+                            <div class="cargo-info-grid compact-cargo">
+                                <span><strong>Durum</strong>{{ urun.get_kargo_durumu_display }}</span>
+                                <span><strong>Varış</strong>{{ urun.kargonun_gelecegi_yer }}</span>
+                                {% if urun.tahmini_gelis_tarihi %}
+                                    <span><strong>Tahmini</strong>{{ urun.tahmini_gelis_tarihi }}</span>
+                                {% endif %}
+                                {% if urun.takip_kodu %}
+                                    <span><strong>Takip</strong>{{ urun.takip_kodu }}</span>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="admin-product-side">
                             <strong>{{ urun.fiyat }} TL</strong>

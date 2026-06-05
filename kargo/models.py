@@ -32,6 +32,15 @@ class Sirket(models.Model):
 
 
 class Urun(models.Model):
+    KARGO_DURUMLARI = [
+        ('hazirlaniyor', 'Hazırlanıyor'),
+        ('yolda', 'Yolda'),
+        ('kibrista', 'Kıbrıs’ta'),
+        ('teslime_hazir', 'Teslime hazır'),
+        ('teslim_edildi', 'Teslim edildi'),
+        ('gecikti', 'Gecikti'),
+    ]
+
     sirket = models.ForeignKey(
         Sirket,
         verbose_name='Şirket',
@@ -41,7 +50,15 @@ class Urun(models.Model):
     isim = models.CharField('Ürün ismi', max_length=160)
     fotograf = models.ImageField('Ürün fotoğrafı', upload_to='urun_fotograflari/', blank=True)
     aciklama = models.TextField('Açıklama')
+    cikis_yeri = models.CharField('Çıkış yeri', max_length=180, blank=True)
     kargonun_gelecegi_yer = models.CharField('Kargonun geleceği yer', max_length=180)
+    kargo_durumu = models.CharField('Kargo durumu', max_length=24, choices=KARGO_DURUMLARI, default='hazirlaniyor')
+    takip_kodu = models.CharField('Takip kodu', max_length=120, blank=True)
+    siparis_tarihi = models.DateField('Sipariş tarihi', blank=True, null=True)
+    tahmini_gelis_tarihi = models.DateField('Tahmini geliş tarihi', blank=True, null=True)
+    adet = models.PositiveIntegerField('Adet', default=1)
+    paket_agirligi = models.DecimalField('Paket ağırlığı (kg)', max_digits=7, decimal_places=2, blank=True, null=True)
+    kargo_notu = models.TextField('Kargo notu', blank=True)
     fiyat = models.DecimalField('Fiyat', max_digits=10, decimal_places=2)
     yayinda = models.BooleanField('Ürünü göster', default=True)
     olusturulma_tarihi = models.DateTimeField(auto_now_add=True)
