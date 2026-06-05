@@ -40,6 +40,10 @@
                 <button class="button success" type="submit">Siteye ekle</button>
             </form>
         {% endif %}
+        <form method="post" action="{% url 'sirket_sil' sirket.pk %}" data-confirm="Bu şirket ve şirkete bağlı tüm ürünler silinecek. Devam etmek istiyor musunuz?">
+            {% csrf_token %}
+            <button class="button danger" type="submit">Şirketi sil</button>
+        </form>
     </div>
 
     <section class="section compact">

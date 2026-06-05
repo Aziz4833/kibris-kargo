@@ -14,6 +14,7 @@ urlpatterns = [
     path('panel/sirket/<int:pk>/duzenle/', views.sirket_form, name='sirket_duzenle'),
     path('panel/sirket/<int:pk>/yayinla/', views.sirket_yayinla, name='sirket_yayinla'),
     path('panel/sirket/<int:pk>/yayindan-kaldir/', views.sirket_yayindan_kaldir, name='sirket_yayindan_kaldir'),
+    path('panel/sirket/<int:pk>/sil/', views.sirket_sil, name='sirket_sil'),
     path('panel/sirket/<int:sirket_pk>/urun/yeni/', views.urun_form, name='urun_yeni'),
     path('panel/urun/<int:pk>/duzenle/', views.urun_form, name='urun_duzenle'),
     path('panel/urun/<int:pk>/sil/', views.urun_sil, name='urun_sil'),

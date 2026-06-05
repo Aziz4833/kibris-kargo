@@ -150,6 +150,16 @@ def sirket_yayindan_kaldir(request, pk):
 
 
 @panel_yetkisi_gerekli
+@require_POST
+def sirket_sil(request, pk):
+    sirket = get_object_or_404(Sirket, pk=pk)
+    sirket_ismi = sirket.isim
+    sirket.delete()
+    messages.success(request, f'{sirket_ismi} şirketi ve bağlı ürünleri silindi.')
+    return redirect('panel')
+
+
+@panel_yetkisi_gerekli
 def urun_form(request, sirket_pk=None, pk=None):
     sirket = get_object_or_404(Sirket, pk=sirket_pk) if sirket_pk else None
     urun = get_object_or_404(Urun, pk=pk) if pk else None

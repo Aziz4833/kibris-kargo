@@ -73,4 +73,21 @@ class KargoAkisTestleri(TestCase):
         self.assertRedirects(response, reverse('panel_sirket_detay', args=[sirket.pk]))
         self.assertTrue(sirket.yayinda)
 
+    def test_sirket_urunleriyle_silinebilir(self):
+        self.client.login(username=settings.KARGO_ADMIN_EMAIL, password='GuvenliSifre123')
+        sirket = Sirket.objects.create(isim='Silinecek Firma', yayinda=True)
+        Urun.objects.create(
+            sirket=sirket,
+            isim='Silinecek Ürün',
+            aciklama='Silme testi.',
+            kargonun_gelecegi_yer='Lefkoşa',
+            fiyat='100.00',
+        )
+
+        response = self.client.post(reverse('sirket_sil', args=[sirket.pk]))
+
+        self.assertRedirects(response, reverse('panel'))
+        self.assertFalse(Sirket.objects.filter(pk=sirket.pk).exists())
+        self.assertFalse(Urun.objects.filter(isim='Silinecek Ürün').exists())
+
 # Create your tests here.
