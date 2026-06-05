@@ -1,8 +1,10 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class Sirket(models.Model):
     isim = models.CharField('Şirket ismi', max_length=120, unique=True)
+    slug = models.SlugField('Endpoint', max_length=140, unique=True, blank=True, null=True)
     logo = models.ImageField('Logo', upload_to='sirket_logolari/', blank=True)
     aciklama = models.TextField('Kısa açıklama', blank=True)
     yayinda = models.BooleanField('Ana sayfada yayınla', default=False)
@@ -16,6 +18,17 @@ class Sirket(models.Model):
 
     def __str__(self):
         return self.isim
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.isim) or 'sirket'
+            slug = base_slug
+            counter = 2
+            while Sirket.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f'{base_slug}-{counter}'
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class Urun(models.Model):

@@ -6,9 +6,8 @@
 <section class="auth-wrap">
     <form class="auth-card" method="post">
         {% csrf_token %}
-        <p class="eyebrow">Yetkili giriş</p>
-        <h1>Yönetim paneli</h1>
-        <p class="muted">Bu panel sadece {{ admin_email }} hesabı için açıktır.</p>
+        <p class="eyebrow">Çalışan girişi</p>
+        <h1>Panel</h1>
 
         {% include 'kargo/partials/form_errors.html' with form=form %}
 

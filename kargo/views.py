@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Prefetch
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -13,9 +13,6 @@ from .models import Sirket, Urun
 def anasayfa(request):
     sirketler = (
         Sirket.objects.filter(yayinda=True)
-        .prefetch_related(
-            Prefetch('urunler', queryset=Urun.objects.filter(yayinda=True))
-        )
         .annotate(yayindaki_urun_sayisi=Count('urunler'))
     )
     toplam_urun = Urun.objects.filter(yayinda=True, sirket__yayinda=True).count()
@@ -29,8 +26,8 @@ def anasayfa(request):
     )
 
 
-def sirket_detay(request, pk):
-    sirket = get_object_or_404(Sirket, pk=pk, yayinda=True)
+def sirket_detay(request, slug):
+    sirket = get_object_or_404(Sirket, slug=slug, yayinda=True)
     urunler = sirket.urunler.filter(yayinda=True)
     return render(
         request,
@@ -40,6 +37,11 @@ def sirket_detay(request, pk):
             'urunler': urunler,
         },
     )
+
+
+def eski_sirket_detay(request, pk):
+    sirket = get_object_or_404(Sirket, pk=pk, yayinda=True)
+    return redirect('sirket_detay', slug=sirket.slug, permanent=True)
 
 
 def panel_giris(request):
@@ -56,7 +58,6 @@ def panel_giris(request):
         'kargo/panel_giris.html',
         {
             'form': form,
-            'admin_email': settings.KARGO_ADMIN_EMAIL,
         },
     )
 

@@ -19,6 +19,9 @@
             <span class="status {% if sirket.yayinda %}live{% endif %}">
                 {% if sirket.yayinda %}Ana sayfada yayında{% else %}Henüz ana sayfada değil{% endif %}
             </span>
+            {% if sirket.slug %}
+                <a class="endpoint-link" href="{% url 'sirket_detay' sirket.slug %}">/firma/{{ sirket.slug }}/</a>
+            {% endif %}
         </div>
     </div>
 

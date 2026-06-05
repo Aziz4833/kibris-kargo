@@ -34,7 +34,13 @@ class KargoAkisTestleri(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Trendyol')
-        self.assertContains(response, 'Kahve Makinesi')
+        self.assertNotContains(response, 'Kahve Makinesi')
+
+        detay_response = self.client.get(reverse('sirket_detay', args=[sirket.slug]))
+
+        self.assertEqual(detay_response.status_code, 200)
+        self.assertContains(detay_response, 'Kahve Makinesi')
+        self.assertEqual(sirket.slug, 'trendyol')
 
     def test_panel_yetkisiz_kullaniciya_kapali(self):
         self.client.login(username='baska@example.com', password='GuvenliSifre123')
@@ -42,7 +48,7 @@ class KargoAkisTestleri(TestCase):
         response = self.client.get(reverse('panel'), follow=True)
 
         self.assertRedirects(response, reverse('panel_giris'))
-        self.assertContains(response, 'Bu panel sadece')
+        self.assertContains(response, 'Çalışan girişi')
 
     def test_yetkili_kullanici_paneli_acar(self):
         self.client.login(username=settings.KARGO_ADMIN_EMAIL, password='GuvenliSifre123')
