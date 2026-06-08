@@ -11,6 +11,22 @@
 
         {% include 'kargo/partials/form_errors.html' with form=form %}
 
+        {% if not urun %}
+            <div class="product-template-picker" data-product-template-picker>
+                <div>
+                    <p class="eyebrow">Kolay başlangıç</p>
+                    <h2>Ürün tipini seç</h2>
+                </div>
+                <div class="template-button-grid">
+                    <button class="template-button" type="button" data-product-template="ayakkabi">Ayakkabı</button>
+                    <button class="template-button" type="button" data-product-template="giyim">Kıyafet</button>
+                    <button class="template-button" type="button" data-product-template="teknoloji">Teknoloji</button>
+                    <button class="template-button" type="button" data-product-template="ev">Ev ve yaşam</button>
+                    <button class="template-button" type="button" data-product-template="ozel">Özel ürün</button>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="two-col">
             <label>
                 <span>Ürün ismi</span>
@@ -21,6 +37,10 @@
                 {{ form.fiyat }}
             </label>
         </div>
+        <label>
+            <span>Kategori</span>
+            {{ form.kategori }}
+        </label>
         <label>
             <span>Ürün fotoğrafı</span>
             {{ form.fotograf }}
@@ -51,6 +71,40 @@
             <span>Adet</span>
             {{ form.adet }}
         </label>
+
+        {% if form.vergi_orani %}
+            <div class="tax-panel" data-tax-panel>
+                <div>
+                    <p class="eyebrow">Admin fiyat kontrolü</p>
+                    <h2>Vergi hesaplama</h2>
+                </div>
+                <div class="two-col">
+                    <label>
+                        <span>Vergi oranı (%)</span>
+                        {{ form.vergi_orani }}
+                    </label>
+                    <div class="tax-result">
+                        <span>Vergi dahil fiyat</span>
+                        <strong data-tax-total>0.00 TL</strong>
+                    </div>
+                </div>
+                <button class="button" type="button" data-apply-tax-price>Vergili fiyatı uygula</button>
+            </div>
+        {% endif %}
+
+        <div class="form-section-title">Ürüne özel alanlar</div>
+        <div class="dynamic-fields" data-dynamic-fields>
+            {{ form.ozellikler_json }}
+            <div class="field-suggestions" data-field-suggestions>
+                <button class="suggestion-chip" type="button" data-suggestion-group="giyim">Kıyafet alanları</button>
+                <button class="suggestion-chip" type="button" data-suggestion-group="ayakkabi">Ayakkabı alanları</button>
+                <button class="suggestion-chip" type="button" data-suggestion-group="teknoloji">Teknoloji alanları</button>
+                <button class="suggestion-chip" type="button" data-suggestion-group="ev">Ev alanları</button>
+            </div>
+            <div class="dynamic-field-list" data-dynamic-field-list></div>
+            <button class="button ghost" type="button" data-add-dynamic-field>Alan ekle</button>
+        </div>
+
         <label class="check-row">
             {{ form.yayinda }}
             <span>Ürünü vitrinde göster</span>

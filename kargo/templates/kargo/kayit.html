@@ -1,13 +1,13 @@
 {% extends 'kargo/base.html' %}
 
-{% block title %}Giriş | Kıbrıs Kargo Pazarı{% endblock %}
+{% block title %}Kayıt | Kıbrıs Kargo Pazarı{% endblock %}
 
 {% block content %}
 <section class="auth-wrap">
     <form class="auth-card" method="post">
         {% csrf_token %}
-        <p class="eyebrow">Hesap girişi</p>
-        <h1>Giriş yap</h1>
+        <p class="eyebrow">Yeni hesap</p>
+        <h1>Kayıt ol</h1>
 
         {% include 'kargo/partials/form_errors.html' with form=form %}
 
@@ -19,8 +19,12 @@
             <span>Şifre</span>
             {{ form.password }}
         </label>
-        <button class="button primary full" type="submit">Giriş yap</button>
-        <p class="auth-alt">Hesabınız yoksa <a href="{% url 'kayit' %}">kayıt olun</a>.</p>
+        <label>
+            <span>Şifre tekrar</span>
+            {{ form.password_tekrar }}
+        </label>
+        <button class="button primary full" type="submit">Hesap aç</button>
+        <p class="auth-alt">Zaten hesabınız varsa <a href="{% url 'panel_giris' %}">giriş yapın</a>.</p>
     </form>
 </section>
 {% endblock %}

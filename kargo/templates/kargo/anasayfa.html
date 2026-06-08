@@ -34,7 +34,12 @@
                                 <span class="logo-placeholder">{{ sirket.isim|slice:":2"|upper }}</span>
                             {% endif %}
                         </span>
-                        <strong>{{ sirket.isim }}</strong>
+                        <span class="company-tile-info">
+                            <strong>{{ sirket.isim }}</strong>
+                            {% if sirket.gorunen_kategori %}
+                                <small>{{ sirket.gorunen_kategori }}</small>
+                            {% endif %}
+                        </span>
                     </a>
                 </article>
             {% endfor %}

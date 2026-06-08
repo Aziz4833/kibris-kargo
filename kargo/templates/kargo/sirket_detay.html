@@ -14,7 +14,29 @@
     <div>
         <p class="eyebrow">Şirket vitrini</p>
         <h1>{{ sirket.isim }}</h1>
+        <div class="company-class-row">
+            {% if sirket.gorunen_kategori %}
+                <span class="category-pill">{{ sirket.gorunen_kategori }}</span>
+            {% endif %}
+            {% if sirket.isletme_tipi %}
+                <span class="mini-badge">{{ sirket.isletme_tipi }}</span>
+            {% endif %}
+        </div>
         <p>{{ sirket.aciklama|default:'Bu şirket altındaki ürünleri aşağıda görebilirsiniz.' }}</p>
+        <div class="company-profile-grid">
+            {% if sirket.merkez %}
+                <span><strong>Merkez</strong>{{ sirket.merkez }}</span>
+            {% endif %}
+            {% if sirket.teslimat_bolgeleri %}
+                <span><strong>Teslimat bölgeleri</strong>{{ sirket.teslimat_bolgeleri }}</span>
+            {% endif %}
+            {% if sirket.iletisim_email %}
+                <span><strong>E-posta</strong>{{ sirket.iletisim_email }}</span>
+            {% endif %}
+            {% if sirket.telefon %}
+                <span><strong>Telefon</strong>{{ sirket.telefon }}</span>
+            {% endif %}
+        </div>
     </div>
 </section>
 
@@ -43,6 +65,9 @@
                             <h3>{{ urun.isim }}</h3>
                             <strong>{{ urun.fiyat }} TL</strong>
                         </div>
+                        {% if urun.kategori %}
+                            <span class="category-pill">{{ urun.kategori }}</span>
+                        {% endif %}
                         <p>{{ urun.aciklama|truncatechars:90 }}</p>
                         <div class="product-meta-row">
                             {% if urun.cikis_yeri %}

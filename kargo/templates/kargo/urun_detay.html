@@ -15,6 +15,9 @@
         <p class="eyebrow">{{ sirket.isim }}</p>
         <h1>{{ urun.isim }}</h1>
         <strong class="detail-price">{{ urun.fiyat }} TL</strong>
+        {% if urun.kategori %}
+            <span class="category-pill detail-category">{{ urun.kategori }}</span>
+        {% endif %}
         <p>{{ urun.aciklama }}</p>
 
         <div class="cargo-info-grid detail-cargo">
@@ -24,6 +27,15 @@
             <span><strong>Geleceği yer</strong>{{ urun.kargonun_gelecegi_yer }}</span>
             <span><strong>Adet</strong>{{ urun.adet }}</span>
         </div>
+
+        {% if urun.ozellikler %}
+            <div class="form-section-title">Ürün özellikleri</div>
+            <div class="cargo-info-grid detail-cargo">
+                {% for key, value in urun.ozellikler.items %}
+                    <span><strong>{{ key }}</strong>{{ value }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <div class="form-actions">
             <a class="button primary" href="{% url 'sirket_detay' sirket.slug %}">{{ sirket.isim }} ürünleri</a>

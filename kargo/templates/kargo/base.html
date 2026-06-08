@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Kıbrıs Kargo Pazarı{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'kargo/styles.css' %}">
-    <script defer src="{% static 'kargo/app.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'kargo/styles.css' %}?v=20260608-ui2">
+    <script defer src="{% static 'kargo/app.js' %}?v=20260608-ui2"></script>
 </head>
 <body>
     <header class="site-header">
@@ -20,10 +20,11 @@
         <nav class="main-nav">
             <a href="{% url 'anasayfa' %}">Ana sayfa</a>
             {% if request.user.is_authenticated %}
-                <a href="{% url 'panel' %}">Yönetim paneli</a>
+                <a href="{% url 'panel' %}">Panel</a>
                 <a href="{% url 'panel_cikis' %}">Çıkış</a>
             {% else %}
-                <a href="{% url 'panel_giris' %}">Panel girişi</a>
+                <a href="{% url 'panel_giris' %}">Giriş</a>
+                <a href="{% url 'kayit' %}">Kayıt</a>
             {% endif %}
         </nav>
     </header>

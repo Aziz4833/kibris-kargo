@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
+from kargo.models import SirketKategorisi
+
 
 class Command(BaseCommand):
     help = 'Yetkili panel hesabını oluşturur veya günceller.'
@@ -32,5 +34,22 @@ class Command(BaseCommand):
         user.set_password(password)
         user.save()
 
+        kategoriler = [
+            ('Moda', 'Giyim, ayakkabı ve aksesuar satan işletmeler.'),
+            ('Teknoloji', 'Elektronik, bilgisayar, telefon ve aksesuar ürünleri.'),
+            ('Ev ve Yaşam', 'Ev, dekorasyon, mutfak ve yaşam ürünleri.'),
+            ('Kozmetik', 'Bakım, kozmetik ve kişisel ürünler.'),
+            ('Market', 'Gıda, temel ihtiyaç ve günlük tüketim ürünleri.'),
+            ('Spor', 'Spor ekipmanları, outdoor ve hobi ürünleri.'),
+            ('Kitap ve Kırtasiye', 'Kitap, kırtasiye ve eğitim ürünleri.'),
+            ('Diğer', 'Özel veya karma ürün satan işletmeler.'),
+        ]
+        for sira, (ad, aciklama) in enumerate(kategoriler, start=10):
+            SirketKategorisi.objects.get_or_create(
+                ad=ad,
+                defaults={'aciklama': aciklama, 'sira': sira},
+            )
+
         action = 'olusturuldu' if created else 'guncellendi'
         self.stdout.write(self.style.SUCCESS(f'{email} panel hesabi {action}.'))
+        self.stdout.write(self.style.SUCCESS('Varsayilan sirket kategorileri hazir.'))

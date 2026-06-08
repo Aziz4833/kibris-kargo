@@ -4,49 +4,108 @@
 
 {% block content %}
 <section class="panel-shell">
-    <div class="company-admin-head">
-        <div class="detail-logo">
-            {% if sirket.logo %}
-                <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+    <div class="company-dashboard-hero">
+        <div class="company-admin-head">
+            <div class="detail-logo">
+                {% if sirket.logo %}
+                    <img src="{{ sirket.logo.url }}" alt="{{ sirket.isim }} logosu">
+                {% else %}
+                    <span class="logo-placeholder large">{{ sirket.isim|slice:":2"|upper }}</span>
+                {% endif %}
+            </div>
+            <div>
+                <p class="eyebrow">Şirket yönetimi</p>
+                <h1>{{ sirket.isim }}</h1>
+                <p>{{ sirket.aciklama|default:'Açıklama eklenmedi.' }}</p>
+                <div class="company-status-row">
+                    <span class="status {% if sirket.yayinda %}live{% endif %}">
+                        {% if sirket.yayinda %}Ana sayfada yayında{% else %}Henüz ana sayfada değil{% endif %}
+                    </span>
+                    {% if sirket.slug %}
+                        <a class="endpoint-link" href="{% url 'sirket_detay' sirket.slug %}">/firma/{{ sirket.slug }}/</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="company-hero-actions">
+            <a class="button" href="{% url 'panel' %}">Panele dön</a>
+            <a class="button" href="{% url 'sirket_duzenle' sirket.pk %}">Şirketi düzenle</a>
+            <a class="button primary" href="{% url 'urun_yeni' sirket.pk %}">Ürün ekle</a>
+            <form method="post" action="{% url 'sirket_sil' sirket.pk %}" data-confirm="Bu şirket ve şirkete bağlı tüm ürünler silinecek. Devam etmek istiyor musunuz?">
+                {% csrf_token %}
+                <button class="button danger" type="submit">Şirketi sil</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="dashboard-summary">
+        <span><strong>{{ urunler|length }}</strong> ürün</span>
+        <span><strong>{% if sirket.yayinda %}Yayında{% else %}Taslak{% endif %}</strong> vitrin durumu</span>
+        <span><strong>{{ sirket.guncellenme_tarihi|date:"d.m.Y" }}</strong> son güncelleme</span>
+    </div>
+
+    <section class="dashboard-grid">
+        <article class="dashboard-card">
+            <span class="dashboard-icon">+</span>
+            <h2>Ürün ekle</h2>
+            <p>Boş ürün formuyla başlayın ve tüm alanları kendiniz belirleyin.</p>
+            <a class="button primary" href="{% url 'urun_yeni' sirket.pk %}">Boş ürün formu</a>
+        </article>
+        <article class="dashboard-card">
+            <span class="dashboard-icon">OK</span>
+            <h2>Vitrine çıkar</h2>
+            <p>Şirket hazır olduğunda ana sayfadaki firma vitrini içinde yayınlayın.</p>
+            {% if sirket.yayinda %}
+                <form method="post" action="{% url 'sirket_yayindan_kaldir' sirket.pk %}">
+                    {% csrf_token %}
+                    <button class="button warning" type="submit">Yayından kaldır</button>
+                </form>
             {% else %}
-                <span class="logo-placeholder large">{{ sirket.isim|slice:":2"|upper }}</span>
+                <form method="post" action="{% url 'sirket_yayinla' sirket.pk %}">
+                    {% csrf_token %}
+                    <button class="button success" type="submit">Siteye ekle</button>
+                </form>
             {% endif %}
-        </div>
-        <div>
-            <p class="eyebrow">Şirket yönetimi</p>
-            <h1>{{ sirket.isim }}</h1>
-            <p>{{ sirket.aciklama|default:'Açıklama eklenmedi.' }}</p>
-            <span class="status {% if sirket.yayinda %}live{% endif %}">
-                {% if sirket.yayinda %}Ana sayfada yayında{% else %}Henüz ana sayfada değil{% endif %}
-            </span>
+        </article>
+        <article class="dashboard-card">
+            <span class="dashboard-icon">URL</span>
+            <h2>Canlı sayfa</h2>
+            <p>Şirket yayınlandıysa müşterinin göreceği sayfayı kontrol edin.</p>
             {% if sirket.slug %}
-                <a class="endpoint-link" href="{% url 'sirket_detay' sirket.slug %}">/firma/{{ sirket.slug }}/</a>
+                <a class="button" href="{% url 'sirket_detay' sirket.slug %}">Sayfayı aç</a>
             {% endif %}
+        </article>
+    </section>
+
+    <section class="template-panel dashboard-section-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Ürün şablonları</p>
+                <h2>Hızlı başlangıç</h2>
+            </div>
         </div>
-    </div>
+        <div class="template-grid">
+            <a class="template-card" href="{% url 'urun_yeni' sirket.pk %}?sablon=ayakkabi">
+                <strong>Ayakkabı</strong>
+                <span>Numara, renk, materyal ve cinsiyet alanlarıyla başlar.</span>
+            </a>
+            <a class="template-card" href="{% url 'urun_yeni' sirket.pk %}?sablon=giyim">
+                <strong>Kıyafet</strong>
+                <span>Beden, renk, kumaş ve kalıp alanlarıyla başlar.</span>
+            </a>
+            <a class="template-card" href="{% url 'urun_yeni' sirket.pk %}?sablon=teknoloji">
+                <strong>Teknoloji</strong>
+                <span>Marka, model, garanti ve teknik durum alanlarıyla başlar.</span>
+            </a>
+            <a class="template-card" href="{% url 'urun_yeni' sirket.pk %}?sablon=ev">
+                <strong>Ev ve yaşam</strong>
+                <span>Ölçü, malzeme ve kullanım alanı alanlarıyla başlar.</span>
+            </a>
+        </div>
+    </section>
 
-    <div class="action-bar">
-        <a class="button" href="{% url 'panel' %}">Panele dön</a>
-        <a class="button" href="{% url 'sirket_duzenle' sirket.pk %}">Şirketi düzenle</a>
-        <a class="button primary" href="{% url 'urun_yeni' sirket.pk %}">Ürün ekle</a>
-        {% if sirket.yayinda %}
-            <form method="post" action="{% url 'sirket_yayindan_kaldir' sirket.pk %}">
-                {% csrf_token %}
-                <button class="button warning" type="submit">Yayından kaldır</button>
-            </form>
-        {% else %}
-            <form method="post" action="{% url 'sirket_yayinla' sirket.pk %}">
-                {% csrf_token %}
-                <button class="button success" type="submit">Siteye ekle</button>
-            </form>
-        {% endif %}
-        <form method="post" action="{% url 'sirket_sil' sirket.pk %}" data-confirm="Bu şirket ve şirkete bağlı tüm ürünler silinecek. Devam etmek istiyor musunuz?">
-            {% csrf_token %}
-            <button class="button danger" type="submit">Şirketi sil</button>
-        </form>
-    </div>
-
-    <section class="section compact">
+    <section class="section compact dashboard-section-card">
         <div class="section-heading">
             <div>
                 <p class="eyebrow">Ürün listesi</p>
@@ -67,6 +126,9 @@
                         </div>
                         <div>
                             <h3>{{ urun.isim }}</h3>
+                            {% if urun.kategori %}
+                                <span class="category-pill">{{ urun.kategori }}</span>
+                            {% endif %}
                             <p>{{ urun.aciklama }}</p>
                             <div class="cargo-info-grid compact-cargo">
                                 {% if urun.cikis_yeri %}
@@ -74,6 +136,12 @@
                                 {% endif %}
                                 <span><strong>Varış</strong>{{ urun.kargonun_gelecegi_yer }}</span>
                                 <span><strong>Adet</strong>{{ urun.adet }}</span>
+                                {% if patron_mu and urun.vergi_orani %}
+                                    <span><strong>Vergi</strong>%{{ urun.vergi_orani }}</span>
+                                {% endif %}
+                                {% for key, value in urun.ozellikler.items %}
+                                    <span><strong>{{ key }}</strong>{{ value }}</span>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="admin-product-side">

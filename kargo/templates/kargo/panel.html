@@ -6,8 +6,8 @@
 <section class="panel-shell">
     <div class="panel-heading">
         <div>
-            <p class="eyebrow">Yönetim</p>
-            <h1>Şirket ve ürün paneli</h1>
+            <p class="eyebrow">{% if patron_mu %}Patron paneli{% else %}Satıcı paneli{% endif %}</p>
+            <h1>{% if patron_mu %}Yetkiler, şirketler ve ürünler{% else %}Şirket ve ürün yönetimi{% endif %}</h1>
         </div>
         <a class="button primary" href="{% url 'sirket_yeni' %}">Yeni şirket</a>
     </div>
@@ -17,6 +17,37 @@
         <div class="stat-box"><strong>{{ taslak_sayisi }}</strong><span>Taslak şirket</span></div>
         <div class="stat-box"><strong>{{ urun_sayisi }}</strong><span>Toplam ürün</span></div>
     </div>
+
+    {% if patron_mu %}
+        <section class="permission-panel">
+            <div>
+                <p class="eyebrow">Satıcı yetkileri</p>
+                <h2>Satıcı e-postaları</h2>
+                <p class="muted">Buraya eklenen e-posta ile kayıt olan kullanıcı kendi şirketini ve ürünlerini yönetebilir.</p>
+            </div>
+            <form class="permission-form" method="post" action="{% url 'satici_yetkisi_ekle' %}">
+                {% csrf_token %}
+                {{ yetki_formu.email }}
+                <button class="button primary" type="submit">Yetki ver</button>
+            </form>
+            {% if satici_yetkileri %}
+                <div class="permission-list">
+                    {% for yetki in satici_yetkileri %}
+                        <div class="permission-row">
+                            <strong>{{ yetki.email }}</strong>
+                            <span class="status {% if yetki.aktif %}live{% endif %}">
+                                {% if yetki.aktif %}Aktif{% else %}Pasif{% endif %}
+                            </span>
+                            <form method="post" action="{% url 'satici_yetkisi_sil' yetki.pk %}" data-confirm="Bu satıcı yetkisi kaldırılacak. Devam etmek istiyor musunuz?">
+                                {% csrf_token %}
+                                <button class="button danger" type="submit">Kaldır</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    {% endif %}
 
     <div class="toolbar">
         <input type="search" id="panelSearch" placeholder="Şirket ara...">
@@ -35,7 +66,18 @@
                     </div>
                     <div class="row-main">
                         <h2>{{ sirket.isim }}</h2>
+                        <div class="company-class-row">
+                            {% if sirket.gorunen_kategori %}
+                                <span class="category-pill">{{ sirket.gorunen_kategori }}</span>
+                            {% endif %}
+                            {% if sirket.isletme_tipi %}
+                                <span class="mini-badge">{{ sirket.isletme_tipi }}</span>
+                            {% endif %}
+                        </div>
                         <p>{{ sirket.aciklama|default:'Açıklama eklenmedi.' }}</p>
+                        {% if patron_mu and sirket.sahip %}
+                            <small class="muted">Sahip: {{ sirket.sahip.email }}</small>
+                        {% endif %}
                     </div>
                     <div class="row-meta">
                         <span class="status {% if sirket.yayinda %}live{% endif %}">
@@ -49,7 +91,7 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <h3>İlk şirketi oluşturun.</h3>
+            <h3>{% if patron_mu %}Henüz şirket yok.{% else %}Şirketinizi oluşturun.{% endif %}</h3>
             <p>Şirket adı ve logosunu ekleyip ardından ürünleri bu şirket altında toplayabilirsiniz.</p>
         </div>
     {% endif %}
